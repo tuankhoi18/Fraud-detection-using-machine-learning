@@ -5,7 +5,7 @@
 |-------------------------|-------------|-----------------------------------|------------------------------|
 | Nguyễn Phạm Tuấn Khôi   | 3123410174  | 9tuankhoi6@gmail.com              | https://tuankhoi18.github.io |
 | Ngô Thượng Bảo          | 3123410024  |                                   |                              |
-| Nguyễn Trọng Nhân       | 3123410242  |                                   |                              |
+| Nguyễn Trọng Nhân       | 3123410242  | trongnhan0567@gmail.com           | https://nguyentrongnhan2211.github.io/trongnhan1705.github.io|
 | Nguyễn Hữu Tri          | 3123410387  |                                   |                              |
 
 ## Kế hoạch dự kiến
