@@ -1,4 +1,4 @@
-# Security and Privacy of the Metaverse
+# Fraud detection using machine learning
 
 ## Thành viên
 | Họ và tên               | MSSV        | Email                             | Website cá nhân              |
