@@ -95,12 +95,6 @@ Dự án này tập trung vào việc phát hiện gian lận thông qua phân l
 
 ---
 
-### 12. **`eda.docx`** và **`baocao.txt`**
-- **Mô tả**: Tài liệu phân tích dữ liệu chi tiết và báo cáo kết quả nghiên cứu.
-- **Mục đích**: Tài liệu hóa kết quả nghiên cứu và phân tích.
-
----
-
 ## 🚀 Hướng dẫn sử dụng
 
 1. **Huấn luyện mô hình**:
@@ -136,13 +130,4 @@ Dự án này tập trung vào việc phát hiện gian lận thông qua phân l
   pip install -r requirements.txt
   ```
   
-### Phân tích khám phá dữ liệu (EDA)
-- Chạy script `eda-ppnhan.py` để thực hiện phân tích dữ liệu và tạo các biểu đồ trực quan hóa
-- Kết quả phân tích được lưu trong thư mục `eda_images/` với các biểu đồ:
-  - `label_distribution.png` - Phân bố nhãn Spam/Ham trong tập dữ liệu
-  - `top_words_spam.png` - Top 20 từ xuất hiện nhiều nhất trong email Spam
-  - `top_words_ham.png` - Top 20 từ xuất hiện nhiều nhất trong email Ham
-
-
-
 © Nghiên cứu khoa học - Trường Đại học Sài Gòn (SGU)
