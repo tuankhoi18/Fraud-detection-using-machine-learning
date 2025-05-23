@@ -7,10 +7,17 @@ from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, Input, TextVectorization
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.metrics import Precision, Recall
 import tensorflow as tf
 
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+
+from sklearn.metrics import accuracy_score, precision_score, recall_score
+
 print("👉 Bắt đầu load dữ liệu...")
-df = pd.read_csv('emails.csv')
+df = pd.read_csv(r'C:\Users\ASUS\Documents\GitHub\Fraud-detection-using-machine-learning\model\emails.csv')
 print(f"Dữ liệu có {df.shape[0]} dòng và {df.shape[1]} cột.")
 
 print("👉 Chuẩn bị dữ liệu...")
@@ -116,16 +123,20 @@ x = Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.0
 x = tf.keras.layers.Dropout(0.3)(x)
 outputs = Dense(1, activation='sigmoid')(x)
 
-model = Model(inputs=text_input, outputs=outputs)
 
+model = Model(inputs=text_input, outputs=outputs)
 model.compile(
     optimizer=Adam(learning_rate=0.001),
     loss='binary_crossentropy',
-    metrics=['accuracy']
+    metrics=['accuracy', Precision(name='precision'), Recall(name='recall')]
 )
+
 
 print("👉 Chia dữ liệu train/test...")
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+scaler = MinMaxScaler()
+X_scaled_train = scaler.fit_transform(X_train)
+X_scaled_test = scaler.fit_transform(X_test)
 
 X_train_texts = prepare_data_for_model(X_train, keywords)
 X_test_texts = prepare_data_for_model(X_test, keywords)
@@ -149,8 +160,43 @@ history = model.fit(
     verbose=1
 )
 print("👉 Đánh giá mô hình...")
-loss, accuracy = model.evaluate(X_test_texts, y_test, verbose=0)
+loss, accuracy, precision, recall = model.evaluate(X_test_texts, y_test, verbose=0)
+
+
+svc = SVC(kernel= "sigmoid", gamma  = 1.0)
+knc = KNeighborsClassifier()
+mnb = MultinomialNB()
+
+clfs = {
+    'Support Vector Machine': svc,
+    'K Nearest Neighbors': knc,
+    'Naive Bayes': mnb,    
+}
+
+def train_classifier(clfs, X_train, y_train, X_test, y_test, is_nb):
+    if is_nb:
+        clfs.fit(X_train, y_train)
+        y_pred = clfs.predict(X_test)
+    else:
+        clfs.fit(X_scaled_train, y_train)
+        y_pred = clfs.predict(X_scaled_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred, zero_division=0)
+    recall = recall_score(y_test, y_pred, zero_division=0)
+    return accuracy, precision, recall
+
+for name , clfs in clfs.items():
+    current_accuracy, current_precision, current_recall = train_classifier(clfs, X_train, y_train, X_test, y_test, is_nb=(clfs == mnb))
+    print()
+    print(name, ": ")
+    print("Accuracy: ", current_accuracy)
+    print("Precision: ", current_precision)
+    print("Recall: ", current_recall)
+
+print("Neural Network")
 print(f"✅ Test Accuracy: {accuracy:.4f}")
+print(f"✅ Test Precision: {precision:.4f}")
+print(f"✅ Test Recall: {recall:.4f}")
 print("👉 Lưu mô hình...")
 model.save('spam_classifier_model.keras', save_format='tf')
 print("🎉 Huấn luyện và lưu mô hình thành công!")
